@@ -1,12 +1,12 @@
-name: targetp
-description: Run targetp
+name: signalp
+description: Run SignalP
 keywords:
   - fasta
 tools:
   - singnalp:
       description: |
-        TargetP the presence of N-terminal presequences
-      homepage: https://services.healthtech.dtu.dk/service.php?TargetP-2.0
+        SignalP predicts the presence of signal peptides and the location of their cleavage sites in proteins
+      homepage: https://services.healthtech.dtu.dk/service.php?SignalP-5.0
       licence: ["Academic"]
 input:
   - meta:
@@ -24,10 +24,10 @@ output:
       description: |
         Groovy Map containing sample information
         e.g. [ id:'test', single_end:false ]
-  - out_targetp:
+  - out_signalp:
       type: file
-      description: targetp output file
-      pattern: "out_targetp_*"
+      description: SignalP output file
+      pattern: "out_signalp_*"
   - versions:
       type: file
       description: File containing software versions

@@ -1,4 +1,4 @@
-process SIGNALP {
+process TARGETP {
     tag "$fasta"
     label 'process_low'
 
@@ -8,7 +8,7 @@ process SIGNALP {
     tuple val(meta), path(fasta)
 
     output:
-    tuple val(meta), path ("out_signalp_*"), emit: out_signalp
+    tuple val(meta), path ("out_targetp_*"), emit: out_targetp
     path "versions.yml"            , emit: versions
 
     when:
@@ -17,22 +17,22 @@ process SIGNALP {
     script:
     def args = task.ext.args ?: ''
     """
-    signalp -fasta ${fasta} \
-    -stdout > out_signalp_${fasta}
+    targetp -fasta ${fasta} \
+    -stdout > out_targetp_${fasta}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        signalp: \$(echo \$(signalp -version --version 2>&1) | sed 's/^.*SignalP version //; s/Linux.*$//')
+        targetp: \$(echo \$(targetp -version --version 2>&1) | sed 's/^.*TargetP version //; s/Linux.*$//')
     END_VERSIONS
     """
 
     stub:
     """
-    touch out_signalp_${fasta}
+    touch out_targetp_${fasta}
     cat <<-END_VERSIONS > versions.yml
 
     "${task.process}":
-        signalp: \$(echo \$(signalp -version --version 2>&1) | sed 's/^.*SignalP version //; s/Linux.*$//')
+        targetp: \$(echo \$(targetp -version --version 2>&1) | sed 's/^.*TargetP version //; s/Linux.*$//')
     END_VERSIONS
     """
 }
