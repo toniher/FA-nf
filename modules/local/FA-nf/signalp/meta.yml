@@ -1,0 +1,36 @@
+name: signalp
+description: Run SignalP
+keywords:
+  - fasta
+tools:
+  - singnalp:
+      description: |
+        SignalP predicts the presence of signal peptides and the location of their cleavage sites in proteins
+      homepage: https://services.healthtech.dtu.dk/service.php?SignalP-5.0
+      licence: ["Academic"]
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - fasta:
+      type: file
+      description: FASTA file
+      pattern: "*.{fa,fasta}"
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - out_signalp:
+      type: file
+      description: SignalP output file
+      pattern: "out_signalp_*"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "@toniher"
