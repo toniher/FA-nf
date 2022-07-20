@@ -1,13 +1,13 @@
-name: targetp
-description: Run targetp
+name: interproscan_download
+description: Download InterPro data
 keywords:
   - fasta
 tools:
-  - signalp:
+  - interproscan:
       description: |
-        TargetP the presence of N-terminal presequences
-      homepage: https://services.healthtech.dtu.dk/service.php?TargetP-2.0
-      licence: ["Academic"]
+        InterPro is a database which integrates together predictive information about proteins' function
+      homepage: https://interproscan-docs.readthedocs.io
+      licence: ["Apache License 2.0"]
 input:
   - meta:
       type: map
@@ -24,10 +24,10 @@ output:
       description: |
         Groovy Map containing sample information
         e.g. [ id:'test', single_end:false ]
-  - out_targetp:
-      type: file
-      description: targetp output file
-      pattern: "out_targetp_*"
+  - data_interpro:
+      type: directory
+      description: InterPro data directory
+      pattern: "data/"
   - versions:
       type: file
       description: File containing software versions
