@@ -17,6 +17,9 @@
 // DSL2 pipeline
 nextflow.enable.dsl = 2
 
+include { FA-NF } from './workflows/fa-nf'
+include { DOWNLOAD } from './workflows/download'
+
 
 // default parameters
 params.help = false
@@ -325,4 +328,6 @@ if ( params.chunkWebSize ) {
   chunkWebSize = params.chunkWebSize
 }
 
-
+workflow {
+    FA-NF ()
+}

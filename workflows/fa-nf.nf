@@ -4,7 +4,7 @@ nextflow.enable.dsl = 2
 // TODO: Validate inputs here
 
 //  Include modules below
-include { AGAT_CONVERTSPGXF2GXF } from './modules/nf-core/agat/convertspgxf2gxf/main'
+include { AGAT_CONVERTSPGXF2GXF } from '../modules/nf-core/agat/convertspgxf2gxf/main'
 include { DIAMOND_BLASTP } from '../modules/nf-core/diamond/blastp/main' 
 include { KOFAMSCAN } from './modules/nf-core/kofamscan/main'
 include { INTERPROSCAN } from '../modules/nf-core/interproscan/main'  

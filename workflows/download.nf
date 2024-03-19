@@ -1,6 +1,9 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl = 2
 
+include { DIAMOND_MAKEDB } from '../modules/nf-core/diamond/makedb/main' 
+
+
 // default parameters
 params.help = false
 
@@ -65,7 +68,7 @@ workflow DOWNLOAD {
   // // Download NCBI DBs
   // call downloadNCBI
   // // Format NCBI DBs
-  // call formatDIAMOND
+    DIAMOND_MAKEDB()
   // // Download InterProScan data
   // call downloadInterPro
   // // Download KEGG Orthology data
@@ -108,23 +111,23 @@ process downloadNCBI {
 
 }
 
-process formatDIAMOND {
-
-  publishDir params.blastDbFolder, mode: 'copy'
-
-  label 'diamond'
-
-  input:
-  set db, file(fasta) from blastdb
-
-  output:
-  file "*" into formatted_blastdb
-
-  """
-  diamond makedb --in ${db}.fa --db ${db}
-  """
-
-}
+// process formatDIAMOND {
+//
+//   publishDir params.blastDbFolder, mode: 'copy'
+//
+//   label 'diamond'
+//
+//   input:
+//   set db, file(fasta) from blastdb
+//
+//   output:
+//   file "*" into formatted_blastdb
+//
+//   """
+//   diamond makedb --in ${db}.fa --db ${db}
+//   """
+//
+// }
 
 process downloadInterPro {
 

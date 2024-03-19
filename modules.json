@@ -15,6 +15,11 @@
             "git_sha": "b29f6beb86d1d24d680277fb1a3f4de7b8b8a92c",
             "installed_by": ["modules"]
           },
+          "diamond/makedb": {
+            "branch": "master",
+            "git_sha": "b29f6beb86d1d24d680277fb1a3f4de7b8b8a92c",
+            "installed_by": ["modules"]
+          },
           "interproscan": {
             "branch": "master",
             "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
