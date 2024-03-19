@@ -1,27 +1,5 @@
 #!/usr/bin/env nextflow
-
-/*
- * Copyright (c) 2017-2021, Centre for Genomic Regulation (CRG)
- *
- * Copyright (c) 2021, Toni Hermoso Pulido
- *
- * Functional Annotation Pipeline for protein annotation from non-model organisms
- * from Genome Annotation Team in Catalonia (GATC) implemented in Nextflow
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
+nextflow.enable.dsl = 2
 
 // default parameters
 params.help = false
@@ -81,6 +59,20 @@ if ( params.blastDBList == null || params.blastDBList == "" ) {
 
 blastDBChannel = Channel.fromList( params.blastDBList?.tokenize(',') )
 
+workflow DOWNLOAD {
+  // Download GO OBO file
+  // call oboFile
+  // // Download NCBI DBs
+  // call downloadNCBI
+  // // Format NCBI DBs
+  // call formatDIAMOND
+  // // Download InterProScan data
+  // call downloadInterPro
+  // // Download KEGG Orthology data
+  // call downloadKO
+}
+
+// TODO: Move download stuff into modules
 
 process oboFile {
 
@@ -182,7 +174,37 @@ process downloadKO {
 // On finising
 workflow.onComplete {
 
- println ( workflow.success ? "\nDone! Check downloaded datasets in --> $params.dbPath\n" : "Oops .. something went wrong" )
+    println ( workflow.success ? "\nDone! Check downloaded datasets in --> $params.dbPath\n" : "Oops .. something went wrong" )
+
+    def msg = """\
+    Pipeline execution summary
+    ---------------------------
+    FA-nf Version    : ${workflow.manifest.version}
+    Nextflow Version : ${nextflow.version}
+    Command Line     : ${workflow.commandLine}
+    Resumed          : ${workflow.resume}
+    Completed At     : ${workflow.complete}
+    Duration         : ${workflow.duration}
+    Success          : ${workflow.success}
+    Exit Code        : ${workflow.exitStatus}
+    Error Report     : ${workflow.errorReport ?: '-'}
+    Launch Dir       : ${workflow.launchDir}
+    """
+    .stripIndent()
+
+    println( msg )
+
+    if ( mysql ) {
+        def procfile = new File( params.mysqllog+"/PROCESS" )
+        procfile.delete()
+    }
+
+    if (params.email == "yourmail@yourdomain" || params.email == "") {
+        log.info 'Skipping email\n'
+    } else {
+        log.info "Sending email to ${params.email}\n"
+        sendMail(to: params.email, subject: "[FA-nf] Execution finished", body: msg)
+    }
 
 }
 
@@ -193,25 +215,4 @@ workflow.onError {
 }
 
 
-if (params.email == "yourmail@yourdomain" || params.email == "") {
-    log.info 'Skipping email\n'
-} else {
-    log.info "Sending email to ${params.email}\n"
 
-    workflow.onComplete {
-
-    def msg = """\
-        Pipeline execution summary
-        ---------------------------
-        Completed at: ${workflow.complete}
-        Duration    : ${workflow.duration}
-        Success     : ${workflow.success}
-        workDir     : ${workflow.workDir}
-        exit status : ${workflow.exitStatus}
-        Error report: ${workflow.errorReport ?: '-'}
-        """
-        .stripIndent()
-
-        sendMail(to: params.email, subject: "[FA-nf] Download finished", body: msg)
-    }
-}
