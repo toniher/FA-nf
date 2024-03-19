@@ -2,3 +2,4 @@ external/
 tmp/
 .nextflow*
 work/
+.python-version

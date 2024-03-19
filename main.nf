@@ -26,6 +26,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//  Include modules below
+include { AGAT_CONVERTSPGXF2GXF } from './modules/nf-core/agat/convertspgxf2gxf/main'
+include { DIAMOND_BLASTP } from '../modules/nf-core/diamond/blastp/main' 
+include { KOFAMSCAN } from './modules/nf-core/kofamscan/main'
+include { INTERPROSCAN } from '../modules/nf-core/interproscan/main'  
 
 // there can be three log levels: off (no messages), info (some main messages), debug (all messages + sql queries)
 

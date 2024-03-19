@@ -1,0 +1,32 @@
+{
+  "name": "",
+  "homePage": "",
+  "repos": {
+    "https://github.com/nf-core/modules.git": {
+      "modules": {
+        "nf-core": {
+          "agat/convertspgxf2gxf": {
+            "branch": "master",
+            "git_sha": "71ccbccbd498af48c33939e1123517340bab3d6f",
+            "installed_by": ["modules"]
+          },
+          "diamond/blastp": {
+            "branch": "master",
+            "git_sha": "b29f6beb86d1d24d680277fb1a3f4de7b8b8a92c",
+            "installed_by": ["modules"]
+          },
+          "interproscan": {
+            "branch": "master",
+            "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+            "installed_by": ["modules"]
+          },
+          "kofamscan": {
+            "branch": "master",
+            "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+            "installed_by": ["modules"]
+          }
+        }
+      }
+    }
+  }
+}
