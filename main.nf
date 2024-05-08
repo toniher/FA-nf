@@ -19,6 +19,8 @@ nextflow.enable.dsl = 2
 
 include { FA_NF } from './workflows/fa_nf'
 include { DOWNLOAD } from './workflows/download'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_fanf_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_fanf_pipeline'
 
 //print usage
 if ( params.help ) {
@@ -46,9 +48,21 @@ log.info "------------------"
 
 log.info "DOWNLOAD: ${params.download}"
 
-WorkflowMain.initialise(workflow, params, log)
-
 workflow RUN_DOWNLOAD {
+    
+    //
+    // SUBWORKFLOW: Run initialisation tasks
+    //
+    PIPELINE_INITIALISATION (
+        params.version,
+        params.help,
+        params.validate_params,
+        params.monochrome_logs,
+        args,
+        params.outdir,
+        params.input
+    )
+
     DOWNLOAD ()
 }
 
