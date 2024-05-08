@@ -2,7 +2,8 @@
 nextflow.enable.dsl = 2
 
 include { DIAMOND_MAKEDB } from '../modules/nf-core/diamond/makedb/main' 
-
+include { BLAST_UPDATEBLASTDB } from '../modules/nf-core/blast/updateblastdb'
+include { BLAST_BLASTDBCMD } from '../modules/nf-core/blast/blastdbcmd'
 
 // default parameters
 params.help = false
@@ -92,25 +93,25 @@ process oboFile {
 }
 
 
-process downloadNCBI {
-
-  publishDir params.blastDbFolder, mode: 'copy'
-
-  label 'blast'
-
-  input:
-  val db from blastDBChannel
-
-  output:
-  set val(db), file ("*") into blastdb
-
-  """
-  update_blastdb.pl ${db} --timeout ${params.blastTimeout} --decompress
-  blastdbcmd -dbtype prot -db ${db} -entry all -out ${db}.fa
-  """
-
-}
-
+// process downloadNCBI {
+//
+//   publishDir params.blastDbFolder, mode: 'copy'
+//
+//   label 'blast'
+//
+//   input:
+//   val db from blastDBChannel
+//
+//   output:
+//   set val(db), file ("*") into blastdb
+//
+//   """
+//   update_blastdb.pl ${db} --timeout ${params.blastTimeout} --decompress
+//   blastdbcmd -dbtype prot -db ${db} -entry all -out ${db}.fa
+//   """
+//
+// }
+//
 // process formatDIAMOND {
 //
 //   publishDir params.blastDbFolder, mode: 'copy'
