@@ -2,7 +2,10 @@ process INTERPROSCAN_DOWNLOAD {
     tag "$fasta"
     label 'process_low'
 
-    container ""
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/interproscan:5.59_91.0--hec16e2b_1' :
+        'biocontainers/interproscan:5.59_91.0--hec16e2b_1' }"
 
     input:
     tuple val(meta), path(fasta)
