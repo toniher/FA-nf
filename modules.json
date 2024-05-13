@@ -8,57 +8,79 @@
                     "agat/convertspgxf2gxf": {
                         "branch": "master",
                         "git_sha": "b7d09fae1f4fd5880138af68a68c9587528f0de8",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "blast/blastdbcmd": {
                         "branch": "master",
                         "git_sha": "b00ebb6cb81bce9989f34db969d934585208c5eb",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "blast/blastn": {
                         "branch": "master",
                         "git_sha": "209e5a3e2753c5e628736a662c877c20f341ee15",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "blast/blastp": {
                         "branch": "master",
                         "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "blast/makeblastdb": {
                         "branch": "master",
                         "git_sha": "a01c66c96e0bc610ad126e7adc4a94cd4acd1b48",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "blast/tblastn": {
                         "branch": "master",
                         "git_sha": "209e5a3e2753c5e628736a662c877c20f341ee15",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "blast/updateblastdb": {
                         "branch": "master",
                         "git_sha": "ee5e296e28b87db9b7b0a6684bfa4e4bfe1059a3",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "diamond/blastp": {
                         "branch": "master",
                         "git_sha": "b29f6beb86d1d24d680277fb1a3f4de7b8b8a92c",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "diamond/makedb": {
                         "branch": "master",
                         "git_sha": "b29f6beb86d1d24d680277fb1a3f4de7b8b8a92c",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "interproscan": {
                         "branch": "master",
                         "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "kofamscan": {
                         "branch": "master",
                         "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     }
                 }
             },
@@ -67,17 +89,23 @@
                     "utils_nextflow_pipeline": {
                         "branch": "master",
                         "git_sha": "5caf7640a9ef1d18d765d55339be751bb0969dfa",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     },
                     "utils_nfcore_pipeline": {
                         "branch": "master",
                         "git_sha": "5caf7640a9ef1d18d765d55339be751bb0969dfa",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     },
                     "utils_nfvalidation_plugin": {
                         "branch": "master",
                         "git_sha": "5caf7640a9ef1d18d765d55339be751bb0969dfa",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     }
                 }
             }
