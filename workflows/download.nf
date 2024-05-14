@@ -21,18 +21,36 @@ if ( params.blastDBList == null || params.blastDBList == "" ) {
 }
 
 blastDBChannel = Channel.fromList( params.blastDBList?.tokenize(',') )
+meta_map = [
+    [id: 'mito'], // meta map
+    'mito'
+]
 
 workflow DOWNLOAD {
+
+    main:
+    ch_versions = Channel.empty()
+
     // DOWNLOAD_OBOFILE()
-    meta_map = [
-        [id: 'mito'], // meta map
-        'mito'
-    ]
     BLAST_UPDATEBLASTDB(meta_map)
-    // DIAMOND_MAKEDB()
+    BLAST_BLASTDBCMD( [ [ id: 'mito' ], 'all', [] ], BLAST_UPDATEBLASTDB.out.db )
+    DIAMOND_MAKEDB(BLAST_BLASTDBCMD.out.fasta, [], [], [])
     // TODO: Download InterProScan data
     // DOWNLOAD_INTERPROSCAN()
     // KOFAMSCAN_DOWNLOAD()
+
+    ch_versions = ch_versions.mix(BLAST_UPDATEBLASTDB.out.versions.first())
+    ch_versions = ch_versions.mix(BLAST_BLASTDBCMD.out.versions.first())
+
+    emit:
+    db = BLAST_UPDATEBLASTDB.out.db
+
+    db.toList().view { println "Path: ${it[0][1]}" }
+
+    fasta = BLAST_BLASTDBCMD.out.fasta
+    fasta.view { println "Path: ${it}" }
+    versions = ch_versions
+    versions.view { println "Versions: ${it}" }
 }
 
 // TODO: Move download stuff into modules

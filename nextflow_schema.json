@@ -142,6 +142,9 @@
     "blastFile": {
       "type": "string"
     },
+    "blastDBList": {
+      "type": "string"
+    },
     "blastDbPath": {
       "type": "string"
     },
