@@ -15,7 +15,7 @@ if ( params.dbPath == null || params.dbPath == "" ) {
   exit 1
 }
 
-if ( params.blastDBList == null || params.blastDBList == "" ) {
+if ( params.dbList == null || params.dbList == "" ) {
   log.info "No BLAST DBs provided"
   exit 1
 }

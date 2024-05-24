@@ -49,21 +49,15 @@ log.info "------------------"
 log.info "DOWNLOAD: ${params.download}"
 
 workflow RUN_DOWNLOAD {
-    
+
+    take:
+    dbnames // channel: dbnames from --input
+
+    main:
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
-    PIPELINE_INITIALISATION (
-        params.version,
-        params.help,
-        params.validate_params,
-        params.monochrome_logs,
-        args,
-        params.outdir,
-        params.input
-    )
-
-    DOWNLOAD ()
+    DOWNLOAD(dbnames)
 }
 
 workflow RUN_FA_NF {
@@ -72,5 +66,30 @@ workflow RUN_FA_NF {
 
 workflow {
 
-    DOWNLOAD ()
+    PIPELINE_INITIALISATION (
+        params.version,
+        params.help,
+        params.validate_params,
+        params.monochrome_logs,
+        args,
+        params.dbPath,
+        params.dbList
+    )
+
+    RUN_DOWNLOAD (
+        PIPELINE_INITIALISATION.out.dbnames
+    )
+
+    //
+    // SUBWORKFLOW: Run completion tasks
+    //
+    PIPELINE_COMPLETION (
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
+        params.outdir,
+        params.monochrome_logs,
+        params.hook_url
+    )
+
 }
