@@ -76,20 +76,23 @@ workflow {
         params.dbList
     )
 
+    PIPELINE_INITIALISATION.out.dbnames.view { println "DB: ${it}" }
+
     RUN_DOWNLOAD (
         PIPELINE_INITIALISATION.out.dbnames
     )
 
+
     //
     // SUBWORKFLOW: Run completion tasks
     //
-    PIPELINE_COMPLETION (
-        params.email,
-        params.email_on_fail,
-        params.plaintext_email,
-        params.outdir,
-        params.monochrome_logs,
-        params.hook_url
-    )
+    // PIPELINE_COMPLETION (
+    //     params.email,
+    //     params.email_on_fail,
+    //     params.plaintext_email,
+    //     params.outdir,
+    //     params.monochrome_logs,
+    //     params.hook_url
+    // )
 
 }

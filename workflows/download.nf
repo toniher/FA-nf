@@ -28,11 +28,15 @@ meta_map = [
 
 workflow DOWNLOAD {
 
+    take:
+    dbnames // channel: [ dbnames ]
+
     main:
     ch_versions = Channel.empty()
 
     // DOWNLOAD_OBOFILE()
-    BLAST_UPDATEBLASTDB(meta_map)
+    BLAST_UPDATEBLASTDB(dbnames) // We should convert this channel of ids into meta
+    // BLAST_BLASTDBCMD( [ [ id: 'mito' ], 'all', [] ], BLAST_UPDATEBLASTDB.out.db )
     BLAST_BLASTDBCMD( [ [ id: 'mito' ], 'all', [] ], BLAST_UPDATEBLASTDB.out.db )
     DIAMOND_MAKEDB(BLAST_BLASTDBCMD.out.fasta, [], [], [])
     // TODO: Download InterProScan data

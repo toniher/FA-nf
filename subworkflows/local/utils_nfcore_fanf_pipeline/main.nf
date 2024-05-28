@@ -82,12 +82,12 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromPath(input)
         .splitText()
-        .set{ ch_samplesheet }
+        .set{ ch_dbnames }
 
 
 
     emit:
-    samplesheet = ch_samplesheet
+    dbnames     = ch_dbnames
     versions    = ch_versions
 }
 
