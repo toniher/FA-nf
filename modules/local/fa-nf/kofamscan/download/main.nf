@@ -1,25 +1,50 @@
 process KOFAMSCAN_DOWNLOAD {
 
-    publishDir params.dbKOPath, mode: 'copy'
+    tag "$meta.id"
+    label 'process_single'
 
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/interproscan:5.59_91.0--hec16e2b_1' :
-        'biocontainers/interproscan:5.59_91.0--hec16e2b_1' }"
+    container 'docker.io/guigolab/fa-nf:0.4.0'
 
-    label 'download'
+    input:
+    tuple val(meta), val(ko_version)
 
     output:
-    file "ko_list" into ko_list
-    file "profiles" into ko_profiles
-    file "ko_store" into ko_store
+    tuple val(meta), path("ko_list"),  emit: ko_list
+    tuple val(meta), path("profiles"), emit: profiles
+    tuple val(meta), path("ko_store"), emit: ko_store
+    path "versions.yml"              , emit: versions
 
+    when:
+    task.ext.when == null || task.ext.when
+
+    script:
+    prefix = task.ext.prefix ?: meta.id
+    ko_url = "https://www.genome.jp/ftp/db/kofam/archives"
     """
-    curl --retry 3 -o ko_list.gz ${params.koURLlist};
+    curl --retry 3 -o ko_list.gz ${ko_url}/${ko_version}/ko_list.gz;
     gunzip ko_list.gz;
-    curl --retry 3 -o profiles.tar.gz ${params.koURLprofiles};
+    curl --retry 3 -o profiles.tar.gz ${ko_url}/${ko_version}/profiles.tar.gz;
     tar zxf profiles.tar.gz; rm profiles.tar.gz;
     mkdir ko_store
     bulkDownloadKEGG.pl ko_list ko_store
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        bulkDownloadKEGG: 0.0.0
+    END_VERSIONS
+    """
+
+    stub:
+    prefix = task.ext.prefix ?: meta.id
+    """
+    touch ko_list
+    mkdir profiles
+    mkdir ko_store
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        bulkDownloadKEGG: 0.0.0
+    END_VERSIONS
     """
 
 }

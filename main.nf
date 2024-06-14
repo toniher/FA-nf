@@ -46,8 +46,6 @@ log.info ""
 log.info "General parameters"
 log.info "------------------"
 
-log.info "DOWNLOAD: ${params.download}"
-
 workflow RUN_DOWNLOAD {
 
     take:
@@ -72,11 +70,9 @@ workflow {
         params.validate_params,
         params.monochrome_logs,
         args,
-        params.dbPath,
-        params.dbList
+        params.outdir,
+        params.dblist
     )
-
-    PIPELINE_INITIALISATION.out.dbnames.view { println "DB: ${it}" }
 
     RUN_DOWNLOAD (
         PIPELINE_INITIALISATION.out.dbnames

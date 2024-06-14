@@ -10,12 +10,12 @@ include { paramsSummaryMap       } from 'plugin/nf-validation'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_fanf_pipeline'
 
-if ( params.dbPath == null || params.dbPath == "" ) {
+if ( params.outdir == null || params.outdir == "" ) {
   log.info "No target directory specified"
   exit 1
 }
 
-if ( params.dbList == null || params.dbList == "" ) {
+if ( params.dblist == null || params.dblist == "" ) {
   log.info "No BLAST DBs provided"
   exit 1
 }
@@ -42,16 +42,18 @@ workflow DOWNLOAD {
     DIAMOND_MAKEDB(BLAST_BLASTDBCMD.out.fasta, [], [], [])
     // TODO: Download InterProScan data
     // DOWNLOAD_INTERPROSCAN()
-    // KOFAMSCAN_DOWNLOAD()
+    KOFAMSCAN_DOWNLOAD([ [ id: 'ko-'+params.ko_version ], params.ko_version ])
 
     ch_versions = ch_versions.mix(BLAST_UPDATEBLASTDB.out.versions.first())
     ch_versions = ch_versions.mix(BLAST_BLASTDBCMD.out.versions.first())
+    ch_versions.view()
+    softwareVersionsToYAML(ch_versions)
+        .collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'nf_core_pipeline_fanf_versions.yml', sort: true, newLine: true)
+        .set { ch_collated_versions }
 
     emit:
     fasta = BLAST_BLASTDBCMD.out.fasta
-    fasta.view { println "Path: ${it}" }
-    versions = ch_versions
-    versions.view { println "Versions: ${it}" }
+    versions = ch_collated_versions
 }
 
 // TODO: Move download stuff into modules

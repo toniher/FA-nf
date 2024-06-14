@@ -5,9 +5,9 @@ nextflow.enable.dsl = 2
 
 //  Include modules below
 include { AGAT_CONVERTSPGXF2GXF } from '../modules/nf-core/agat/convertspgxf2gxf/main'
-include { DIAMOND_BLASTP } from '../modules/nf-core/diamond/blastp/main' 
+include { DIAMOND_BLASTP } from '../modules/nf-core/diamond/blastp/main'
 include { KOFAMSCAN } from '../modules/nf-core/kofamscan/main'
-include { INTERPROSCAN } from '../modules/nf-core/interproscan/main'  
+include { INTERPROSCAN } from '../modules/nf-core/interproscan/main'
 
 
 mysql = false
@@ -19,7 +19,7 @@ workflow FA_NF {
 // On finising
 workflow.onComplete {
 
-    println ( workflow.success ? "\nDone! Check results in --> $params.resultPath\n" : "Oops .. something went wrong" )
+    println ( workflow.success ? "\nDone! Check results in --> $params.outdir\n" : "Oops .. something went wrong" )
 
     def msg = """\
     Pipeline execution summary
