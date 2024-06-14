@@ -20,12 +20,6 @@ if ( params.dbList == null || params.dbList == "" ) {
   exit 1
 }
 
-blastDBChannel = Channel.fromList( params.blastDBList?.tokenize(',') )
-meta_map = [
-    [id: 'mito'], // meta map
-    'mito'
-]
-
 workflow DOWNLOAD {
 
     take:
@@ -35,9 +29,16 @@ workflow DOWNLOAD {
     ch_versions = Channel.empty()
 
     // DOWNLOAD_OBOFILE()
-    BLAST_UPDATEBLASTDB(dbnames) // We should convert this channel of ids into meta
-    // BLAST_BLASTDBCMD( [ [ id: 'mito' ], 'all', [] ], BLAST_UPDATEBLASTDB.out.db )
-    BLAST_BLASTDBCMD( [ [ id: 'mito' ], 'all', [] ], BLAST_UPDATEBLASTDB.out.db )
+
+    // Let's map to fit into module requirement
+    // TODO: Need to check why trimming is required here
+    dbmap = dbnames.map { it -> [ [ id: it.trim() ], it.trim() ] }
+    BLAST_UPDATEBLASTDB(dbmap) // We should convert this channel of ids into meta
+    // BLAST_UPDATEBLASTDB.out.db.view()
+
+    blastmap =  BLAST_UPDATEBLASTDB.out.db.map{ it -> [ it[0], 'all', [] ] }
+    // blastmap.view()
+    BLAST_BLASTDBCMD( blastmap, BLAST_UPDATEBLASTDB.out.db )
     DIAMOND_MAKEDB(BLAST_BLASTDBCMD.out.fasta, [], [], [])
     // TODO: Download InterProScan data
     // DOWNLOAD_INTERPROSCAN()
@@ -47,10 +48,6 @@ workflow DOWNLOAD {
     ch_versions = ch_versions.mix(BLAST_BLASTDBCMD.out.versions.first())
 
     emit:
-    db = BLAST_UPDATEBLASTDB.out.db
-
-    db.toList().view { println "Path: ${it[0][1]}" }
-
     fasta = BLAST_BLASTDBCMD.out.fasta
     fasta.view { println "Path: ${it}" }
     versions = ch_versions
