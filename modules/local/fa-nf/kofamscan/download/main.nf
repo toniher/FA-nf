@@ -21,9 +21,9 @@ process KOFAMSCAN_DOWNLOAD {
     prefix = task.ext.prefix ?: meta.id
     ko_url = "https://www.genome.jp/ftp/db/kofam/archives"
     """
-    curl --retry 3 -o ko_list.gz ${ko_url}/${ko_version}/ko_list.gz;
+    curl -L --retry 3 -o ko_list.gz ${ko_url}/${ko_version}/ko_list.gz;
     gunzip ko_list.gz;
-    curl --retry 3 -o profiles.tar.gz ${ko_url}/${ko_version}/profiles.tar.gz;
+    curl -L --retry 3 -o profiles.tar.gz ${ko_url}/${ko_version}/profiles.tar.gz;
     tar zxf profiles.tar.gz; rm profiles.tar.gz;
     mkdir ko_store
     bulkDownloadKEGG.pl ko_list ko_store

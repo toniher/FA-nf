@@ -6,6 +6,7 @@ include { BLAST_UPDATEBLASTDB } from '../modules/nf-core/blast/updateblastdb'
 include { BLAST_BLASTDBCMD } from '../modules/nf-core/blast/blastdbcmd'
 include { INTERPROSCAN_DOWNLOAD } from '../modules/local/fa-nf/interproscan/download'
 include { KOFAMSCAN_DOWNLOAD } from '../modules/local/fa-nf/kofamscan/download'
+include { OBO_DOWNLOAD } from '../modules/local/fa-nf/obo_download.nf'
 include { paramsSummaryMap       } from 'plugin/nf-validation'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_fanf_pipeline'
@@ -43,6 +44,7 @@ workflow DOWNLOAD {
     // TODO: Download InterProScan data
     // DOWNLOAD_INTERPROSCAN()
     KOFAMSCAN_DOWNLOAD([ [ id: 'ko-'+params.ko_version ], params.ko_version ])
+    OBO_DOWNLOAD([ [id: 'obo' ], params.obo_url ])
 
     ch_versions = ch_versions.mix(BLAST_UPDATEBLASTDB.out.versions.first())
     ch_versions = ch_versions.mix(BLAST_BLASTDBCMD.out.versions.first())
