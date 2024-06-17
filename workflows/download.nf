@@ -58,19 +58,3 @@ workflow DOWNLOAD {
     versions = ch_collated_versions
 }
 
-// TODO: Move download stuff into modules
-
-// process oboFile {
-//
-//   publishDir params.oboFolder, mode: 'copy'
-//   label 'download'
-//
-//   output:
-//   file "gene_ontology.obo" into oboFile
-//
-//   """
-//   curl --retry 3 -o gene_ontology.obo ${params.goOboURL};
-//   """
-//
-// }
-//

@@ -1,33 +1,32 @@
 process INTERPROSCAN_DOWNLOAD {
-    tag "$fasta"
+
+    tag "$meta.id"
     label 'process_low'
 
-    conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/interproscan:5.59_91.0--hec16e2b_1' :
-        'biocontainers/interproscan:5.59_91.0--hec16e2b_1' }"
+    container 'docker.io/biocorecrg/interproscan:${interproscan_version}' // TODO: To fix
 
     input:
-    tuple val(meta), path(fasta)
+    tuple val(meta), val(interproscan_version)
 
     output:
-    tuple val(meta), path ("data"), emit: data_interpro
-    path "versions.yml"            , emit: versions
+    tuple val(meta), path("data"),     emit: interproscan_data
+    path "versions.yml"              , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
+    interproscan_url = "https://ftp.ebi.ac.uk/pub/databases/interpro/iprscan/5/${params.interproscan_version}/alt/interproscan-data-${interproscan_version}.tar.gz"
     """
-    curl --retry 3 -o iprscan.tar.gz ${params.iprscanURL};
+    curl -L --retry 3 -o iprscan.tar.gz ${interproscan_url};
     tar zxf iprscan.tar.gz
     rm iprscan.tar.gz
-    cd interproscan-${params.iprscanVersion}
+    cd interproscan-${params.interproscan_version}
     python3 initial_setup.py
     cd ..
-    mv interproscan-${params.iprscanVersion}/data .
-    rm -rf interproscan-${params.iprscanVersion}
+    mv interproscan-${params.interproscan_version}/data .
+    rm -rf interproscan-${params.interproscan_version}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
