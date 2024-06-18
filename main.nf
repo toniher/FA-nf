@@ -59,11 +59,14 @@ workflow RUN_DOWNLOAD {
 }
 
 workflow RUN_FA_NF {
-    FA_NF ()
+
+    main:
+    FA_NF (params.fasta)
 }
 
 workflow {
 
+    main:
     PIPELINE_INITIALISATION (
         params.version,
         params.help,
@@ -77,7 +80,6 @@ workflow {
     RUN_DOWNLOAD (
         PIPELINE_INITIALISATION.out.dbnames
     )
-
 
     //
     // SUBWORKFLOW: Run completion tasks

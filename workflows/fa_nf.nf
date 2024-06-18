@@ -9,59 +9,31 @@ include { DIAMOND_BLASTP } from '../modules/nf-core/diamond/blastp/main'
 include { KOFAMSCAN } from '../modules/nf-core/kofamscan/main'
 include { INTERPROSCAN } from '../modules/nf-core/interproscan/main'
 
-
-mysql = false
-
 workflow FA_NF {
 
-}
+    take:
+    fasta
 
-// On finising
-workflow.onComplete {
+    main:
+    ch_fasta = Channel
+     .fromPath(fasta, checkIfExists:true)
+     .splitFasta( record: [id: true, seqString: true], by: 10 )
 
-    println ( workflow.success ? "\nDone! Check results in --> $params.outdir\n" : "Oops .. something went wrong" )
+    ch_fasta.view()
 
-    def msg = """\
-    Pipeline execution summary
-    ---------------------------
-    FA-nf Version    : ${workflow.manifest.version}
-    Nextflow Version : ${nextflow.version}
-    Command Line     : ${workflow.commandLine}
-    Resumed          : ${workflow.resume}
-    Completed At     : ${workflow.complete}
-    Duration         : ${workflow.duration}
-    Success          : ${workflow.success}
-    Exit Code        : ${workflow.exitStatus}
-    Error Report     : ${workflow.errorReport ?: '-'}
-    Launch Dir       : ${workflow.launchDir}
-    """
-    .stripIndent()
-
-    println( msg )
-
-    if ( mysql ) {
-        def procfile = new File( params.mysqllog+"/PROCESS" )
-        procfile.delete()
+    if ( ! params.outdir ) {
+        log.error "No DIR"
+        exit 1
     }
 
-    if (params.email == "yourmail@yourdomain" || params.email == "") {
-        log.info 'Skipping email\n'
-    } else {
-        if (params.email) {
-            log.info "Sending email to ${params.email}\n"
-            sendMail(to: params.email, subject: "[FA-nf] Execution finished", body: msg)
-        }
-    }
+    ch_db = Channel.fromPath( "${params.outdir}/diamond/${params.dbname}.dmnd", checkIfExists:true )
+
+    ch_diamond = DIAMOND_BLASTP(ch_fasta, ch_db, "blast", '')
+
+    ch_versions = Channel.empty()
+
+    emit:
+    versions = ch_versions
+    ch_fasta
 }
 
-workflow.onError {
-
-    println( "Something went wrong" )
-
-    if ( mysql ) {
-
-    def procfile = new File( params.mysqllog+"/PROCESS" )
-        procfile.delete()
-    }
-
-}

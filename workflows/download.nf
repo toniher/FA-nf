@@ -11,16 +11,16 @@ include { paramsSummaryMap       } from 'plugin/nf-validation'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_fanf_pipeline'
 
-if ( params.outdir == null || params.outdir == "" ) {
-  log.info "No target directory specified"
-  exit 1
-}
-
-if ( params.dblist == null || params.dblist == "" ) {
-  log.info "No BLAST DBs provided"
-  exit 1
-}
-
+// if ( params.outdir == null || params.outdir == "" ) {
+//   log.info "No target directory specified"
+//   exit 1
+// }
+//
+// if ( params.dblist == null || params.dblist == "" ) {
+//   log.info "No BLAST DBs provided"
+//   exit 1
+// }
+//
 workflow DOWNLOAD {
 
     take:
@@ -28,8 +28,6 @@ workflow DOWNLOAD {
 
     main:
     ch_versions = Channel.empty()
-
-    // DOWNLOAD_OBOFILE()
 
     // Let's map to fit into module requirement
     // TODO: Need to check why trimming is required here
@@ -57,4 +55,3 @@ workflow DOWNLOAD {
     fasta = BLAST_BLASTDBCMD.out.fasta
     versions = ch_collated_versions
 }
-
