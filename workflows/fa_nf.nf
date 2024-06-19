@@ -17,7 +17,8 @@ workflow FA_NF {
     main:
     ch_fasta = Channel
      .fromPath(fasta, checkIfExists:true)
-     .splitFasta( record: [id: true, seqString: true], by: 10 )
+     .splitFasta( by: 10, file: true )
+     .map  { it -> [ [ id: it.toString().trim().split("/")[-1] ], it ] }
 
     ch_fasta.view()
 
@@ -26,9 +27,15 @@ workflow FA_NF {
         exit 1
     }
 
-    ch_db = Channel.fromPath( "${params.outdir}/diamond/${params.dbname}.dmnd", checkIfExists:true )
+    ch_db = Channel
+    .fromPath( "${params.outdir}/diamond/${params.dbname}.dmnd", checkIfExists:true )
+     .map  { it -> [ [ id: it.toString().trim().split("/")[-1] ], it ] }
 
     ch_diamond = DIAMOND_BLASTP(ch_fasta, ch_db, "blast", '')
+    ch_ko_profiles = Channel.fromPath("$params.outdir/kofamscan/profiles", checkIfExists: true)
+    ch_ko_list = Channel.fromPath("$params.outdir/kofamscan/ko_list", checkIfExists: true)
+
+    ch_kofamscan = KOFAMSCAN(ch_fasta, ch_ko_profiles, ch_ko_list)
 
     ch_versions = Channel.empty()
 
