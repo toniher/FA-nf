@@ -3,7 +3,7 @@ process KOFAMSCAN_DOWNLOAD {
     tag "$meta.id"
     label 'process_single'
 
-    container 'docker.io/guigolab/fa-nf:0.4.0'
+    container 'guigolab/fa-nf:0.4.0'
 
     input:
     tuple val(meta), val(ko_version)

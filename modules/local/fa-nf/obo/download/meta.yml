@@ -1,0 +1,30 @@
+name: Download OBO
+description: Download OBO file
+keywords:
+  - obo
+tools:
+  - curl:
+      description: |
+        URL download tool
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - url:
+      type: string
+      description: URL from where download files
+      pattern: "http*"
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - obofile:
+      type: file
+      description: Downloaded OBO file
+      pattern: "*.obo"
+authors:
+  - "@toniher"
