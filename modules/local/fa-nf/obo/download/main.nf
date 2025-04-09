@@ -3,7 +3,7 @@ process OBO_DOWNLOAD {
     tag "$meta.id"
     label 'process_single'
 
-    container 'docker.io/guigolab/fa-nf:0.4.0'
+    container 'docker.io/biocorecrg/debian-perlbrew:latest'
 
     input:
     tuple val(meta), val(url)
